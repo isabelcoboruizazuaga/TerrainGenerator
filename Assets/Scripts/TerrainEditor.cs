@@ -11,34 +11,64 @@ public class TerrainEditor : MonoBehaviour
     [SerializeField] private int detail = 150;
     [SerializeField] private float heightCorrection = -1;
     [SerializeField] private TerrainPaint paint;
-    [SerializeField] private int NumberTrees=10000000;
+    [SerializeField] private int NumberTrees=5;
     [SerializeField] private float minX=0f;
     [SerializeField] private float maxX=1f;
     [SerializeField] private float minZ=0f;
     [SerializeField] private float maxZ=1f;
-
-    public TMPro.TMP_InputField detailInput;
+    [SerializeField] private int waterHeight=160;
+    [SerializeField] private GameObject water;
 
     private float[,] matrix;
+
+    public TMPro.TMP_InputField detailInput;
+    public TMPro.TMP_InputField waterHeightInput;
+    public TMPro.TMP_InputField seedInput;
+
+    public Animator m_Animator;
+
+
 
     // Start is called before the first frame update
     void Start()
     {
 
         matrix = new float[513, 513];
+        
+        ShowPanel();
+        ActualizarTerreno();
 
+    }
+    public void ShowPanel()
+    {
+        detailInput.text = detail.ToString();
+        seedInput.text = seed.ToString();
+        waterHeightInput.text = waterHeight.ToString();
     }
     public void ActualizarTerreno()
     {
         try
         {
-
             detail = Int32.Parse(detailInput.text);
         }
         catch (FormatException e)
         {
-            Debug.Log("No es un número");
         }
+        try
+        {
+            seed = Int32.Parse(seedInput.text);
+        }
+        catch (FormatException e)
+        {
+        }
+        try
+        {
+            waterHeight = Int32.Parse(waterHeightInput.text);
+        }
+        catch (FormatException e)
+        {
+        }
+        m_Animator.SetTrigger("Restart");
 
         HeightGenerator();
 
@@ -78,6 +108,7 @@ public class TerrainEditor : MonoBehaviour
 
     private void HeightGenerator()
     {
+        water.transform.position= new Vector3(water.transform.position.x,waterHeight,water.transform.position.z);
         for(int i=0; i<matrix.GetLength(0); i++)
         {
             for( int j=0; j<matrix.GetLength(1); j++)
