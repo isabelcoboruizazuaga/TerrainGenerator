@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using UnityEngine;
 
 public class TerrainEditor : MonoBehaviour
@@ -24,6 +25,7 @@ public class TerrainEditor : MonoBehaviour
     public TMPro.TMP_InputField detailInput;
     public TMPro.TMP_InputField waterHeightInput;
     public TMPro.TMP_InputField seedInput;
+    public TMPro.TMP_InputField heightCorrectionInput;
 
     public Animator m_Animator;
 
@@ -44,6 +46,7 @@ public class TerrainEditor : MonoBehaviour
         detailInput.text = detail.ToString();
         seedInput.text = seed.ToString();
         waterHeightInput.text = waterHeight.ToString();
+        heightCorrectionInput.text = heightCorrection.ToString();
     }
     public void ActualizarTerreno()
     {
@@ -57,6 +60,15 @@ public class TerrainEditor : MonoBehaviour
         try
         {
             seed = Int32.Parse(seedInput.text);
+        }
+        catch (FormatException e)
+        {
+        }
+        try
+        {
+            CultureInfo culture = CultureInfo.CreateSpecificCulture("fr-FR");
+
+            heightCorrection = (float)Double.Parse(heightCorrectionInput.text,culture);
         }
         catch (FormatException e)
         {
